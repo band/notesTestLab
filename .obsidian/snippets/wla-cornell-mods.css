@@ -1,0 +1,26 @@
+/*
+2023-08-21: suggestions from TfTHacker on how to change the CSS of cue and summary content
+*/
+div:not(.markdown-embed-content) >  :is(.cornell-left, .cornell-right) .markdown-preview-section [data-callout="cue"] {
+    .callout-content {
+        font-size: 16pt;
+        color: blue;
+    }
+
+    .callout-title-inner {
+        font-size: 18pt;
+        color: green;
+    }
+}
+
+div:not(.markdown-embed-content) >  :is(.cornell-left, .cornell-right) .markdown-preview-section [data-callout="summary"] {
+    .callout-content {
+        font-size: 16pt;
+        color: chocolate;
+    }
+
+    .callout-title-inner {
+        font-size: 18pt;
+        color: sienna;
+    }
+}
