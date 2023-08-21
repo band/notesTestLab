@@ -3,24 +3,24 @@
 */
 div:not(.markdown-embed-content) >  :is(.cornell-left, .cornell-right) .markdown-preview-section [data-callout="cue"] {
     .callout-content {
-        font-size: 16pt;
+        font-size: 12pt;
         color: blue;
     }
 
     .callout-title-inner {
-        font-size: 18pt;
-        color: green;
+        font-size: 12pt;
+        color: grey;
     }
 }
 
 div:not(.markdown-embed-content) >  :is(.cornell-left, .cornell-right) .markdown-preview-section [data-callout="summary"] {
     .callout-content {
-        font-size: 16pt;
+        font-size: 12pt;
         color: chocolate;
     }
 
     .callout-title-inner {
-        font-size: 18pt;
+        font-size: 14pt;
         color: sienna;
     }
 }
