@@ -9,6 +9,8 @@ div:not(.markdown-embed-content) >  :is(.cornell-left, .cornell-right) .markdown
 
     .callout-title-inner {
         font-size: 12pt;
+	font-style: italic;
+	font-weight: 409;
         color: grey;
     }
 }
@@ -20,7 +22,10 @@ div:not(.markdown-embed-content) >  :is(.cornell-left, .cornell-right) .markdown
     }
 
     .callout-title-inner {
+	font-family: serif;
+	font-style: italic;
+	font-weight: 257;
         font-size: 14pt;
-        color: sienna;
+        color: black;
     }
 }
