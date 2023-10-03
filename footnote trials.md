@@ -1,5 +1,5 @@
 ---
-cssclass: cornell-right, cornell-border
+cssclass: cornell-right, cornell-border, tufte-sidenotes
 ---
 # footnote trials
 
