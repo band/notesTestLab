@@ -1,7 +1,7 @@
 ---
 cssclass: cornell-left, cornell-border
 ---
-# 2023-08-20
+# 2023-08-20 CNLV trials
 
 >[!cue] keep notes on the trials and errors
 
