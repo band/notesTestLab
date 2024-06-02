@@ -5,10 +5,6 @@ on:
     branches:
       - main
 
-defaults:
-  run: 
-    working-directory: ./.massivewikibuilder/massivewikibuilder/
-  
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -23,11 +19,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+      working-directory: ./.massivewikibuilder/massivewikibuilder
 
     - name: Build website
-      run: |
-        ./mwb.py -c ../mwb.yaml -w ../.. -o ../output -t ../this-wiki-themes/basso --lunr --commits
-
+      run: ./mwb.py -c ../mwb.yaml -w ../.. -o ../output -t ../this-wiki-themes/basso --lunr --commits
+      working-directory: ./.massivewikibuilder/massivewikibuilder
+	
     - name: Deploy MassiveWiki to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
