@@ -24,7 +24,7 @@ jobs:
     - name: Build website
       run: ./mwb.py -c ../mwb.yaml -w ../.. -o ../output -t ../this-wiki-themes/basso --lunr --commits
       working-directory: ./.massivewikibuilder/massivewikibuilder
-	
+
     - name: Deploy MassiveWiki to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
