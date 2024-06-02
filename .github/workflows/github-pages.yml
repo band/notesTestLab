@@ -9,17 +9,17 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
+    - uses: actions/checkout@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.8' # or any other specific version you need
-
+        python-version: '3.8'
+      run: python -c "import sys; print(sys.version)"
     - name: Install dependencies
       run: |
         echo "$PATH"
+	echo "$HOME"
         python -m pip install --upgrade pip
-        pip install -r ./.massivewikibuilder/massivewikibuilder/requirements.txt
+        pip install -r requirements.txt
 
     - name: Build website
       run: ./mwb.py -c ../mwb.yaml -w ../.. -o ../output -t ../this-wiki-themes/basso --lunr --commits
