@@ -7,7 +7,7 @@ on:
 
 defaults:
   run: 
-    working-directory: ./.massivewikibuilder/massivewikibuilder
+    working-directory: ./.massivewikibuilder/massivewikibuilder/
   
 jobs:
   deploy:
@@ -21,7 +21,6 @@ jobs:
 
     - name: Install dependencies
       run: |
-        working-directory: ./.massivewikibuilder/massivewikibuilder
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
