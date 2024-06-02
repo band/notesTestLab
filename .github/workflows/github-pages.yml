@@ -10,22 +10,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.8' # or any other specific version you need
 
       - name: Install dependencies
-        run:
+   	working-directory: .massivewikibuilder/massivewikibuilder
+        run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt # Replace with your requirements file
-	  working-directory: .massivewikibuilder/massivewikibuilder
+          pip install -r requirements.txt
 
-      - name: Build site
-        run:
+      - name: Build website
+      	working-directory: .massivewikibuilder/massivewikibuilder
+        run: |
           ./mwb.py -c ../mwb.yaml -w ../.. -o ../output -t ../this-wiki-themes/basso --lunr --commits
-	  working-directory: .massivewikibuilder/massivewikibuilder
 
       - name: Deploy MassiveWiki to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
