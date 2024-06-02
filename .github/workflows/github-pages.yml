@@ -7,7 +7,7 @@ on:
 
 defaults:
   run: 
-    working-directory: .massivewikibuilder/massivewikibuilder
+    working-directory: ./.massivewikibuilder/massivewikibuilder
   
 jobs:
   deploy:
