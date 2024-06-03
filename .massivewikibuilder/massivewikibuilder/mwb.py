@@ -136,8 +136,9 @@ def main():
     dir_output = Path(args.output).resolve().as_posix()
     dir_templates = Path(args.templates).resolve().as_posix()
     dir_wiki = Path(args.wiki).resolve().as_posix()
-    rootdir = f'/{Path(args.wiki).resolve().name}/'
-#    rootdir = '/'
+    rootdir = '/'
+#    rootdir = f'/{Path(args.wiki).resolve().name}/'
+
 
     # get a Jinja2 environment
     j = jinja2_environment(dir_templates)
