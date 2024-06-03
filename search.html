@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>A.R. Moxon - What is a socialist - notes TestLab</title>
+    <title>Search - notes TestLab</title>
     <link rel="stylesheet" href="/mwb-static/css/mystyles.css">
     <link rel="stylesheet" href="/mwb-static/css/markdown.css">
     <link rel="stylesheet" href="/mwb-static/css/sidebar.css">
@@ -18,6 +18,11 @@
     <script src="/lunr-posts-1717432984.1574693.js"></script>
     
   </head>
+  <style> <!-- TODO: move this to a CSS file -->
+    ul#resList{list-style-position: inside;margin-left:3em;}
+    li.item{list-style:none; padding:5px;}
+    div#renderList{margin-top:1.5em;}
+  </style>
   <body class="has-navbar-fixed-top">
     <nav class="navbar is-fixed-top is-info" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
@@ -78,15 +83,12 @@
 	  </div>
 	  <div class="column">
             <div class="content markdown-body">
-              <h1>A.R. Moxon - What is a socialist?</h1>
-<p>This is an excerpt from an excerpt of an upcoming book:<br />
-APAvar: Moxon, A.R. (2024).  Very Fine People.</p>
-<blockquote>
-<p>A “socialist,” by the way, is somebody who thinks that society exists, and that governments should work for the health and thriving of human beings, and that this means that some things that are conducive to the public good are good in and of themselves even if they don’t create profit for industry, and therefore many such things—like education, or art, or the judicial process, or medical care, or transportation—should be public goods provided by and for the public, administered by representatives chosen by the public, rather than profit centers run specifically and exclusively to turn a profit. They also believe that profit engines should be regulated, to prevent them from making decisions that would maximize profits but also harm human beings. So that’s what a socialist is, and it’s one of the most horrible awful things a person can be, and if you don’t believe me, just go to the real world and ask one of the adults in the room about it.</p>
-</blockquote>
-<p>Link for this excerpt: <a href="https://www.the-reframe.com/what-do-we-do-now/?ref=the-reframe-newsletter">https://www.the-reframe.com/what-do-we-do-now/?ref=the-reframe-newsletter</a></p>
-
-	      
+	      <h1>Search in notes TestLab</h1>
+              
+	      <input type="text" placeholder="type search words" id="inputID">
+	      <button type="button" onclick="doSearch();" id="searchButton">Search</button>
+              
+	      <div id="renderList"></div>
             </div>
 	  </div>
 	</div>
@@ -130,6 +132,61 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 });</script>
+    <script>
+      function doSearch() {
+	let searchString=document.getElementById("inputID").value;
+	var ul = document.createElement('ul');
+	ul.setAttribute('id','resList');
+	const searchResultList = index.search(searchString).map((item) => {
+	  return lunr_posts.find((post) => item.ref === post.link)
+	})
+	render_list = document.getElementById('renderList');
+
+	// clear any previous results, then populate results
+	removeAllChildNodes(render_list);
+	render_list.appendChild(ul);
+	searchResultList.forEach(renderResultList);
+        if (ul.childNodes.length == 0) {
+          render_list.append('No results for "' + searchString + '"')
+	}
+
+	// helper to set a single result (in scope of doSearch())
+	function renderResultList(element, index, arr) {
+	  var anchor = document.createElement('a');
+	  anchor.append(document.createTextNode(`${element.title}`));
+	  anchor.setAttribute('class', 'wikilink');
+	  anchor.setAttribute('href',`${element.link}`);
+	  anchor.setAttribute('target', '_blank');
+	  var li = document.createElement('li');
+	  li.setAttribute('class','item');
+	  li.append(anchor);
+	  ul.append(li);
+	}
+      }
+
+      // helper to clear previous search results
+      function removeAllChildNodes(parent) {
+	while (parent.firstChild) {
+	  parent.removeChild(parent.firstChild);
+	}
+      }
+
+      // ensure the DOM is loaded
+      document.addEventListener('DOMContentLoaded', () => {
+	// search on Enter
+	var input_id = document.getElementById('inputID')
+	input_id.focus()
+	input_id.addEventListener('keypress', function(event) {
+	  if (event.key === "Enter") {
+	    event.preventDefault();
+	    document.getElementById("searchButton").click();
+	  }
+	});
+      })
+    </script>
+
+<!-- uncomment to add Hypothes.is
     <script src="https://hypothes.is/embed.js" async></script>
+-->
   </body>
 </html>
