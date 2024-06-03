@@ -32,10 +32,10 @@ jobs:
       run: npm ci
 
     - name: Build website
-      run: ./mwb.py -c ../mwb.yaml -w ../.. -o ../output -t ../this-wiki-themes/basso --lunr --commits
+      run: ./mwb.py -c ../mwb.yaml -w ../.. -o ../../output -t ../this-wiki-themes/basso --lunr --commits
 
-    - name: Deploy MassiveWiki to GitHub Pages
+    - name: Deploy
       uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ../output
+        publish_dir: ./output
