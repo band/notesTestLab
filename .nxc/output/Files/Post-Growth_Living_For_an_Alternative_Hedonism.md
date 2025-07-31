@@ -15,6 +15,8 @@ We need, in short, to challenge the presumption that the work-dominated, stresse
 green thought and writing, hitherto overly centred on the depletion of the natural world, now needs to focus less on the destruction of nature and its impact on a–supposedly unreformable–consumerist way of living, and more on human political culture and its reconstruction.
 - Page 13
 
+>[!] 
+
 ---
 
 The main aim must be to challenge the supposedly natural (in the sense of inevitable and non-political) evolution of both
@@ -84,6 +86,8 @@ At a time when some economic theorists predict a terminal decline in capitalism�
 
 it may just figure as a vague and rather general malaise that descends in the shopping mall or supermarket: a sense of a world too cluttered and encumbered by material objects and sunk in waste, of priorities skewed through the focus on ever-more extensive provision and acquisition of stuff.
 - Page 54
+
+>[!] 
 
 ---
 

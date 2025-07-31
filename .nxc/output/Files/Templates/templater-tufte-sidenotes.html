@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>templater-tufte-sidenotes - notes TestLab</title>
+    <link rel="stylesheet" href="/mwb-static/css/style.css">
+    <link rel="stylesheet" href="/mwb-static/css/custom.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"></script>
+    <script src="/lunr-index-1731952278.198443.js"></script>
+    <script>var index = lunr.Index.load(lunr_index)</script>
+    
+    
+    <script src="/lunr-posts-1731952278.198443.js"></script>
+    
+  </head>
+<body>
+  <div id="header">
+    <span id="hamburger-btn"
+    class="hidden">&#9776;</span><a class="button is-light" href="/index.html" style="text-decoration: none;">notes TestLab</a>
+  </div>
+
+  <div class="container" id="flex-container">
+    <div id="side-column">
+      <div>
+        <button id="hide-btn">Hide</button>
+        <button id="move-btn" class="hidden">Move to Sidebar</button>
+      </div>
+      <h1>Site Navigation</h1>
+<p><a class="wikilink" href="/README.html">Home</a></p>
+<p><a href="/search.html">Search</a><br />
+<a href="/all-pages.html">All Pages</a></p>
+<h2>A wiki page of note</h2>
+<p><a class="wikilink" href="/A.R._Moxon_-_What_is_a_socialist.html">A.R. Moxon - What is a socialist</a></p>
+
+    </div>
+
+    <div id="main-column">
+      
+      <div> <!-- edit this page button -->
+	<p style="float:right; margin:.5em .5em
+	.5em"><a target="_blank" href="https://github.com/band/notesTestLab/edit/main/Files/Templates/templater-tufte-sidenotes.md"
+	class="edit-this-page-button">Edit This
+	Page</a>&nbsp;<span class="edit-this-page-tooltip"><strong>&#9432;</strong><span class="edit-this-page-tooltiptext">Clicking 'Edit This Page' opens this page on GitHub. You can edit, and save changes, if you are a contributor to the repository. Close the edit page to return to this one.</span></span></p>
+	<br clear="all">
+      </div> <!-- edit this page button -->
+      
+      <p>&lt;%*
+/*
+Author: TfTHacker - more info  https://tfthacker.com/
+Date:   2023-08-13
+LICENSE: Copyright © 2023 TfThacker (https://tfthacker.com/)  You are granted a non-exclusive, non-transferable,
+and non-sublicensable license to use and modify this file for your personal use only, and are prohibited from
+distributing, sublicensing, using for commercial purposes. This file remain the property of TfTHacker, and any unauthorized
+use or infringement will result in termination of this License. This file are provided "AS IS" without warranty of any kind,
+and the Licensor shall not be liable for any damages arising from the use or distribution of this file. By using this file,
+you acknowledge that you have read, understand, and agree to be bound by this License Agreement.
+*/</p>
+<p>/*
+Notes:</p>
+<ul>
+<li>TABLES: Work in tables, but links are buggy</li>
+<li>LISTS: footnotes are only supported in the first level of list, no in child nodes</li>
+<li>Sidenotes will overlap with footnotes from other document sections</li>
+<li>create a template to add Tufte footnote to cssclasses</li>
+<li>no support for embedded content</li>
+<li>sidenotes can disappear while editing. they usually appear after reopening file or continuing to edit document outside of current section. This is due to waiting for Obsidian to update the footer section.
+*/</li>
+</ul>
+<p>console.log("Loading Tufte Sidenotes Processor");</p>
+<p>const templaterPlugin = app.plugins.getPlugin('templater-obsidian').templater;</p>
+<p>//if script is reloaded, unregister the Markdown procesor
+try {
+templaterPlugin.current_functions_object.obsidian.MarkdownPreviewRenderer.unregisterPostProcessor(window.TufteSidenote.MarkdownPostProcessor);
+} catch (error) { }</p>
+<p>window.TufteSidenote = {};
+window.TufteSidenote.footnotes = {};
+window.TufteSidenote.sidenotes = {};</p>
+<p>// The Obsidian base class
+class Component {
+load() {}
+onload() {}
+unload() {}
+}</p>
+<p>class SidenoteRenderer extends Component {
+constructor(el, ctx) {
+super(el);
+this.ctx = ctx;
+}</p>
+<p>// Adds each footnote by section into a container with the class name tufte-sidenotes-collection
+// this class will align the footnotes to the right and stack them using a flex grid
+processFootnotes(el, docId, exportToPDF=false) {
+for (const fRef of Array.from(el.querySelectorAll("sup.footnote-ref"))) {
+const footnoteId = fRef.id.replace("fnref", "fn");</p>
+<pre><code>  
+  // Deetermine what should be the parent node for the sidenotes container
+  let collectionParentNode;
+  if(fRef.parentNode.nodeName==="LI") { //if in a list, only support the first level
+    if(fRef.parentNode.parentNode.parentNode.nodeName==="DIV")
+      collectionParentNode = fRef.parentNode;
+  } else if(fRef.parentNode.nodeName==="TD") //if a table
+    collectionParentNode = fRef.parentNode;
+  else // default paragraph text flow
+    collectionParentNode = exportToPDF ? fRef.parentNode : fRef.parentNode.parentNode;
+
+  // Collection of footnotes
+  let sidenotesCollectionEl;
+  if(collectionParentNode?.querySelector(".tufte-sidenotes-collection")) {
+    sidenotesCollectionEl = collectionParentNode.querySelector(".tufte-sidenotes-collection")
+  } else {
+    sidenotesCollectionEl = document.createElement("div");
+    sidenotesCollectionEl.classList.add("tufte-sidenotes-collection");
+    collectionParentNode?.insertBefore(sidenotesCollectionEl, collectionParentNode.firstChild);
+  }
+                            
+  const sidenoteEl = document.createElement("div");
+  sidenoteEl.classList.add("tufte-sidenote");
+  sidenoteEl.setAttribute("tufte-fn-Id", footnoteId);
+  sidenotesCollectionEl.appendChild(sidenoteEl);
+
+  try {
+    if(exportToPDF===false) {
+      (window.TufteSidenote.sidenotes[docId] ??= []).push(sidenoteEl);
+    }
+    formatFootnote(sidenoteEl, footnoteId, window.TufteSidenote.footnotes[docId][footnoteId].html);
+  } catch (error) { }
+}
+</code></pre>
+<p>}</p>
+<p>load() {
+super.load();
+// contains("markdown-rendered") true when doing an export to PDF
+this.processFootnotes(this.ctx.el, this.ctx.docId, this.ctx.el.classList.contains("markdown-rendered"));
+}</p>
+<p>onunload() { super.onunload() }</p>
+<p>unload() {
+super.unload();
+const docId = this.ctx.docId;
+const rs = window.TufteSidenote.sidenotes[docId] ??= [];
+rs.remove(this)
+if (rs.length &lt;= 0) {
+delete window.TufteSidenote.sidenotes[docId];
+delete window.TufteSidenote.footnotes[docId];
+}
+}</p>
+<p>} //END: SidenoteRenderer</p>
+<p>const formatFootnote = (el, footnoteId, innerHTML) =&gt; {
+const footnoteNumber = footnoteId.match(/(?&lt;=fn-)\d+(?=-)/)[0];
+el.innerHTML = <code>&lt;span class="tufte-footnote-number"&gt;${footnoteNumber}&lt;/span&gt;</code> + innerHTML;
+el.querySelector("a.footnote-backref.footnote-link").remove();
+}</p>
+<p>window.TufteSidenote.MarkdownPostProcessor = async (el, ctx)=&gt; {</p>
+<p>// Test if the document has the proper css classed defined. It needs:
+// - tufte-sidenotes
+// - either cornell-left or cornell-right
+if(ctx.frontmatter===undefined) return;
+let cssclasses = ctx.frontmatter["cssclass"];
+if(cssclasses===undefined) cssclasses = ctx.frontmatter["cssclasses"]; // make compatible with Obsidian 1.4.1+</p>
+<p>if(!cssclasses?.includes("tufte-sidenotes")) return;
+if(!cssclasses?.includes("cornell-left") &amp;&amp; !cssclasses?.includes("cornell-right")) return;</p>
+<p>// Detect if there are footnotes.
+// If using Export To PDF, the el element has a class called markdown-rendered
+// - This means el is the entire document, not section by section as normally handled by MarkdownPostProcessor
+// if this class doesn't exist, the footnotes are not process until all other sections are process
+// - for this reason we add an empty div for the footnote, then after footnotes section is processed, the
+//   empty food note divs are updated with the html of the footnote
+// Long story short, we have to process "screen" and "Export to PDF" differently in rendering
+const footnotes = el.querySelectorAll(".footnotes li");
+if(footnotes.length&gt;0) {
+window.TufteSidenote.footnotes[ctx.docId]={}
+for(const footnote of footnotes) {
+// Save footnotes for later processing
+window.TufteSidenote.footnotes[ctx.docId][footnote.id] = {
+html: footnote.innerHTML
+}
+// if NOT exporting to PDF, update the footnotes
+if(!el.classList.contains("markdown-rendered"))
+for(sidenoteEl of window.TufteSidenote.sidenotes[ctx.docId])
+if(sidenoteEl.getAttribute("tufte-fn-Id")===footnote.id)
+formatFootnote(sidenoteEl, footnote.id, footnote.innerHTML);
+} // END: for
+} // END: if</p>
+<p>ctx.addChild(new SidenoteRenderer(el, ctx));</p>
+<p>}</p>
+<p>templaterPlugin.plugin.registerMarkdownPostProcessor(window.TufteSidenote.MarkdownPostProcessor);</p>
+<p>%&gt;</p>
+
+      
+    </div>
+  </div>
+  <footer class="footer">
+  <div class="content has-text-centered">
+    <div><strong>notes TestLab</strong> by the unpaid anderbill.</div>
+    <div>Central repository at <a href="https://github.com/band/notesTestLab">notesTestLab</a>.</div>
+    <div>Licensed under <a href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</div>
+    <div><em>Site last updated on Monday, November 18, 2024 at 17:51 UTC.</em></div>
+  </div>
+</footer>
+  <script src="/mwb-static/js/script.js"></script>
+</body>
+</html>
